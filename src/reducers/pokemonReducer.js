@@ -1,9 +1,4 @@
-const pokemonReducer = (
-  state = localStorage.getItem("pokemon")
-    ? JSON.parse(localStorage.getItem("pokemon"))
-    : [],
-  action
-) => {
+const pokemonReducer = (state = [], action) => {
   switch (action.type) {
     case "SET_POKEMON":
       return action.payload;
