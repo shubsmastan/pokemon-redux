@@ -1,6 +1,9 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as faHeartEmpty } from "@fortawesome/free-regular-svg-icons";
 import "../styles/Pokemon.scss";
 
-function Pokemon({ pokemon }) {
+function Pokemon({ pokemon, liked, toggleFavourite, handleDelete }) {
   const pokemonName =
     pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
 
@@ -28,8 +31,24 @@ function Pokemon({ pokemon }) {
         <p>{pokemon.height * 10}cm</p>
       </div>
       <div className="buttons flex">
-        <button>Delete</button>
-        <button>Like</button>
+        <button
+          onClick={() => {
+            handleDelete(pokemon.id);
+          }}
+        >
+          <FontAwesomeIcon icon={faXmark} />
+        </button>
+        <button
+          onClick={() => {
+            toggleFavourite(pokemon.id);
+          }}
+        >
+          {liked ? (
+            <FontAwesomeIcon icon={faHeart} />
+          ) : (
+            <FontAwesomeIcon icon={faHeartEmpty} />
+          )}
+        </button>
       </div>
     </div>
   );

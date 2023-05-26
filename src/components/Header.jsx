@@ -5,11 +5,8 @@ function Header() {
   return (
     <>
       <header>
-        <img src={logo} width="200px" />
-        <h1 className="app-logo">
-          A React Redux App by{" "}
-          <a href="https://www.github.com/shubsmastan">ShubsMastan</a>
-        </h1>
+        <img src={logo} />
+        <h1 className="app-logo">A React + Redux App</h1>
       </header>
     </>
   );
