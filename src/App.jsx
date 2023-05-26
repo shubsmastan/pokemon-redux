@@ -15,26 +15,26 @@ function App() {
   const filter = useSelector((state) => state.filter);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    getData();
-  }, []);
+  // useEffect(() => {
+  //   getData();
+  // }, []);
 
-  const getData = async () => {
-    try {
-      let pokedex = [];
-      let random = uniqueRandom(1, 151);
-      for (let i = 0; i < 10; i++) {
-        const { data } = await axios.get(
-          `https://pokeapi.co/api/v2/pokemon/${random()}`
-        );
-        pokedex = pokedex.concat(data);
-      }
-      localStorage.setItem("pokemon", JSON.stringify(pokedex));
-      dispatch({ type: "SET_POKEMON", payload: pokedex });
-    } catch (err) {
-      console.log("Error fetching Pokemon data:", err);
-    }
-  };
+  // const getData = async () => {
+  //   try {
+  //     let pokedex = [];
+  //     let random = uniqueRandom(1, 151);
+  //     for (let i = 0; i < 10; i++) {
+  //       const { data } = await axios.get(
+  //         `https://pokeapi.co/api/v2/pokemon/${random()}`
+  //       );
+  //       pokedex = pokedex.concat(data);
+  //     }
+  //     localStorage.setItem("pokemon", JSON.stringify(pokedex));
+  //     dispatch({ type: "SET_POKEMON", payload: pokedex });
+  //   } catch (err) {
+  //     console.log("Error fetching Pokemon data:", err);
+  //   }
+  // };
 
   const toggleFavourite = (id) => {
     if (favourites.includes(id)) {
