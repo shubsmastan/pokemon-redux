@@ -1,6 +1,6 @@
 # Random Pokemon Generator with React & Redux
 
-Live preview coming soon.<br />
+[Live preview](https://shubsmastan-pokemon-redux.netlify.app).<br />
 
 A [React](https://react.dev) project created as part of [The Jump](https://www.thejump.tech)'s full stack web develpment bootcamp.
 
