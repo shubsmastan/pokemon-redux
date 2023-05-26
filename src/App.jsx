@@ -80,13 +80,6 @@ function App() {
     });
   };
 
-  const changeFilter = (e) => {
-    dispatch({
-      type: "SET_FILTER",
-      payload: e.target.value,
-    });
-  };
-
   let filteredPokemon = [...pokemon];
 
   if (search) {
@@ -129,7 +122,7 @@ function App() {
   return (
     <>
       <Header />
-      <Select selected={filter} changeFilter={changeFilter} />
+      <Select />
       <div className="pokemon-all">
         {filteredPokemon.map((pokemon) => {
           return (

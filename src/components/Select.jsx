@@ -1,8 +1,15 @@
 import { useDispatch } from "react-redux";
 import "../styles/Select.scss";
 
-function Select({ selected, changeFilter }) {
+function Select({ selected }) {
   const dispatch = useDispatch();
+
+  const changeFilter = (e) => {
+    dispatch({
+      type: "SET_FILTER",
+      payload: e.target.value,
+    });
+  };
 
   const handleChangeInput = (e) => {
     dispatch({ type: "SET_INPUT", payload: e.target.value });
