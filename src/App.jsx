@@ -6,21 +6,20 @@ import Loading from "./components/Loading";
 import Select from "./components/Select";
 import Pokemon from "./components/Pokemon";
 import Footer from "./components/Footer";
+import { setData, setFavourites } from "./store/pokemonSlice";
 import "./styles/App.scss";
 
 function App() {
   const [error, setError] = useState("");
 
-  const pokemon = useSelector((state) => state.pokemon);
-  const favourites = useSelector((state) => state.favourites);
-  const filter = useSelector((state) => state.filter);
-  const search = useSelector((state) => state.search);
+  const { data, favourites } = useSelector((state) => state.pokemon);
+  const { filter, search } = useSelector((state) => state.filter);
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    getData();
-  }, []);
+  // useEffect(() => {
+  //   getData();
+  // }, []);
 
   const getData = async () => {
     let arr = [];
@@ -37,7 +36,7 @@ function App() {
         pokedex = pokedex.concat(data);
       }
       localStorage.setItem("pokemon", JSON.stringify(pokedex));
-      dispatch({ type: "SET_POKEMON", payload: pokedex });
+      dispatch(setData(pokedex));
     } catch (err) {
       setError(`Error fetching Pokemon data. ${err.message}.`);
     }
@@ -64,30 +63,17 @@ function App() {
 
   const toggleFavourite = (id) => {
     if (favourites.includes(id)) {
-      dispatch({
-        type: "SET_FAVOURITES",
-        payload: favourites.filter((fave) => fave !== id),
-      });
+      dispatch(setFavourites(favourites.filter((fave) => fave !== id)));
       return;
     }
-    dispatch({ type: "SET_FAVOURITES", payload: [...favourites, id] });
+    dispatch(setFavourites([...favourites, id]));
   };
 
   const handleDelete = (id) => {
-    dispatch({
-      type: "SET_POKEMON",
-      payload: pokemon.filter((mon) => mon.id !== id),
-    });
+    dispatch(setData(data.filter((pokemon) => pokemon.id !== id)));
   };
 
-  const changeFilter = (e) => {
-    dispatch({
-      type: "SET_FILTER",
-      payload: e.target.value,
-    });
-  };
-
-  let filteredPokemon = [...pokemon];
+  let filteredPokemon = [...data];
 
   if (search) {
     filteredPokemon = filteredPokemon.filter((pokemon) => {
@@ -117,7 +103,7 @@ function App() {
       break;
   }
 
-  if (pokemon.length === 0) {
+  if (data.length === 0) {
     return (
       <>
         <Header />
@@ -129,7 +115,7 @@ function App() {
   return (
     <>
       <Header />
-      <Select selected={filter} changeFilter={changeFilter} />
+      <Select />
       <div className="pokemon-all">
         {filteredPokemon.map((pokemon) => {
           return (
