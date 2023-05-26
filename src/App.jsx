@@ -6,6 +6,7 @@ import Loading from "./components/Loading";
 import Select from "./components/Select";
 import Pokemon from "./components/Pokemon";
 import Footer from "./components/Footer";
+import uniqueRandom from "unique-random";
 import "./styles/App.scss";
 
 function App() {
@@ -21,9 +22,10 @@ function App() {
   const getData = async () => {
     try {
       let pokedex = [];
+      let random = uniqueRandom(1, 151);
       for (let i = 0; i < 10; i++) {
         const { data } = await axios.get(
-          `https://pokeapi.co/api/v2/pokemon/${Math.floor(Math.random() * 151)}`
+          `https://pokeapi.co/api/v2/pokemon/${random()}`
         );
         pokedex = pokedex.concat(data);
       }
