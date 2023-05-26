@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import Header from "./components/Header";
 import Loading from "./components/Loading";
@@ -8,50 +9,54 @@ import Footer from "./components/Footer";
 import "./styles/App.scss";
 
 function App() {
-  const [pokemon, setPokemon] = useState(
-    localStorage.getItem("pokemon")
-      ? JSON.parse(localStorage.getItem("pokemon"))
-      : []
-  );
+  const pokemon = useSelector((state) => state.pokemon);
+  const favourites = useSelector((state) => state.favourites);
+  const filter = useSelector((state) => state.filter);
+  const dispatch = useDispatch();
 
-  const [favourites, setFavourites] = useState([]);
+  useEffect(() => {
+    getData();
+  }, []);
 
-  const [filter, setFilter] = useState("all");
-
-  // useEffect(() => {
-  //   getData();
-  // }, []);
-
-  // const getData = async () => {
-  //   try {
-  //     let pokedex = [];
-  //     for (let i = 0; i < 10; i++) {
-  //       const num = ;
-  //         `https://pokeapi.co/api/v2/pokemon/${Math.floor(Math.random() * 151)}`
-  //       );
-  //       pokedex = pokedex.concat(data);
-  //     }
-  //     localStorage.setItem("pokemon", JSON.stringify(pokedex));
-  //     setPokemon(pokedex);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+  const getData = async () => {
+    try {
+      let pokedex = [];
+      for (let i = 0; i < 10; i++) {
+        const { data } = await axios.get(
+          `https://pokeapi.co/api/v2/pokemon/${Math.floor(Math.random() * 151)}`
+        );
+        pokedex = pokedex.concat(data);
+      }
+      localStorage.setItem("pokemon", JSON.stringify(pokedex));
+      dispatch({ type: "SET_POKEMON", payload: pokedex });
+    } catch (err) {
+      console.log("Error fetching Pokemon data:", err);
+    }
+  };
 
   const toggleFavourite = (id) => {
     if (favourites.includes(id)) {
-      setFavourites(favourites.filter((fave) => fave !== id));
+      dispatch({
+        type: "SET_FAVOURITES",
+        payload: favourites.filter((fave) => fave !== id),
+      });
       return;
     }
-    setFavourites([...favourites, id]);
+    dispatch({ type: "SET_FAVOURITES", payload: [...favourites, id] });
   };
 
   const handleDelete = (id) => {
-    setPokemon(pokemon.filter((mon) => mon.id !== id));
+    dispatch({
+      type: "SET_POKEMON",
+      payload: pokemon.filter((mon) => mon.id !== id),
+    });
   };
 
   const changeFilter = (e) => {
-    setFilter(e.target.value);
+    dispatch({
+      type: "SET_FILTER",
+      payload: e.target.value,
+    });
   };
 
   let filteredPokemon = [...pokemon];
@@ -76,10 +81,13 @@ function App() {
       break;
   }
 
-  console.log(filteredPokemon);
-
-  if (!pokemon.length === 0) {
-    return <Loading />;
+  if (pokemon.length === 0) {
+    return (
+      <>
+        <Header />
+        <Loading />
+      </>
+    );
   }
 
   return (
