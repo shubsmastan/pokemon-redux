@@ -26,16 +26,15 @@ function App() {
   //   try {
   //     let pokedex = [];
   //     for (let i = 0; i < 10; i++) {
-  //       const num = Math.floor(Math.random() * 151);
-  //       const { data } = await axios.get(
-  //         `https://pokeapi.co/api/v2/pokemon/${num}`
+  //       const num = ;
+  //         `https://pokeapi.co/api/v2/pokemon/${Math.floor(Math.random() * 151)}`
   //       );
   //       pokedex = pokedex.concat(data);
   //     }
   //     localStorage.setItem("pokemon", JSON.stringify(pokedex));
   //     setPokemon(pokedex);
-  //   } catch (e) {
-  //     console.log(e);
+  //   } catch (err) {
+  //     console.log(err);
   //   }
   // };
 
@@ -57,20 +56,24 @@ function App() {
 
   let filteredPokemon = [...pokemon];
 
-  if (filter === "favourites") {
-    filteredPokemon = filteredPokemon.filter((mon) =>
-      favourites.includes(mon.id)
-    );
-  } else if (filter === "ascending") {
-    filteredPokemon = filteredPokemon.sort((mon1, mon2) => {
-      return mon1.name.localeCompare(mon2.name);
-    });
-  } else if (filter === "descending") {
-    filteredPokemon = filteredPokemon.sort((mon1, mon2) => {
-      return -1 * mon1.name.localeCompare(mon2.name);
-    });
-  } else {
-    filteredPokemon = [...pokemon];
+  switch (filter) {
+    case "favourites":
+      filteredPokemon = filteredPokemon.filter((mon) =>
+        favourites.includes(mon.id)
+      );
+      break;
+    case "ascending":
+      filteredPokemon = filteredPokemon.sort((mon1, mon2) => {
+        return mon1.name.localeCompare(mon2.name);
+      });
+      break;
+    case "descending":
+      filteredPokemon = filteredPokemon.sort((mon1, mon2) => {
+        return -1 * mon1.name.localeCompare(mon2.name);
+      });
+      break;
+    default:
+      break;
   }
 
   console.log(filteredPokemon);

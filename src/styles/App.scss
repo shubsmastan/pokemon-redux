@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap");
 @import "./colors";
 
 *,
@@ -10,7 +10,7 @@
 }
 
 body {
-  font-family: "Open Sans", sans-serif;
+  font-family: "Nunito", sans-serif;
   background-color: $background;
 }
 
@@ -43,8 +43,7 @@ select {
 
 button {
   border-radius: 8px;
-  outline: 3px solid $border;
-  border: none;
+  border: 3px solid $border;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 700;
@@ -53,10 +52,12 @@ button {
   cursor: pointer;
   transition: background-color 0.25s ease-in-out;
 
-  &:hover,
+  &:hover {
+    background-color: $border-light;
+  }
   &:focus,
   &:focus-visible {
-    background-color: $border-light;
+    outline: 3px solid $border-light;
   }
 }
 
