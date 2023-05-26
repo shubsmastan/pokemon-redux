@@ -17,9 +17,9 @@ function App() {
 
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   getData();
-  // }, []);
+  useEffect(() => {
+    getData();
+  }, []);
 
   const getData = async () => {
     let arr = [];

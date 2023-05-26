@@ -3,9 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const pokemonSlice = createSlice({
   name: "pokemon",
   initialState: {
-    data: localStorage.getItem("pokemon")
-      ? JSON.parse(localStorage.getItem("pokemon"))
-      : [],
+    data: [],
     favourites: [],
   },
   reducers: {
