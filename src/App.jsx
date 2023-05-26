@@ -13,6 +13,7 @@ function App() {
   const pokemon = useSelector((state) => state.pokemon);
   const favourites = useSelector((state) => state.favourites);
   const filter = useSelector((state) => state.filter);
+  const search = useSelector((state) => state.search);
   const dispatch = useDispatch();
 
   // useEffect(() => {
@@ -20,6 +21,7 @@ function App() {
   // }, []);
 
   // const getData = async () => {
+  //   localStorage.clear();
   //   try {
   //     let pokedex = [];
   //     let random = uniqueRandom(1, 151);
@@ -63,20 +65,28 @@ function App() {
 
   let filteredPokemon = [...pokemon];
 
+  if (search) {
+    filteredPokemon = filteredPokemon.filter((pokemon) => {
+      if (pokemon.name.includes(search.toLowerCase())) {
+        return true;
+      }
+    });
+  }
+
   switch (filter) {
     case "favourites":
-      filteredPokemon = filteredPokemon.filter((mon) =>
-        favourites.includes(mon.id)
+      filteredPokemon = filteredPokemon.filter((pokemon) =>
+        favourites.includes(pokemon.id)
       );
       break;
     case "ascending":
-      filteredPokemon = filteredPokemon.sort((mon1, mon2) => {
-        return mon1.name.localeCompare(mon2.name);
+      filteredPokemon = filteredPokemon.sort((pokemon1, pokemon2) => {
+        return pokemon1.name.localeCompare(pokemon2.name);
       });
       break;
     case "descending":
-      filteredPokemon = filteredPokemon.sort((mon1, mon2) => {
-        return -1 * mon1.name.localeCompare(mon2.name);
+      filteredPokemon = filteredPokemon.sort((pokemon1, pokemon2) => {
+        return -1 * pokemon1.name.localeCompare(pokemon2.name);
       });
       break;
     default:
