@@ -8,7 +8,7 @@
   flex-direction: column;
   justify-content: center;
 
-  img {
+  img.reflect {
     transform: scaleX(-1);
   }
 }

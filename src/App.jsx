@@ -117,10 +117,11 @@ function App() {
       <Header />
       <Select />
       <div className="pokemon-all">
-        {filteredPokemon.map((pokemon) => {
+        {filteredPokemon.map((pokemon, index) => {
           return (
             <Pokemon
               key={pokemon.id}
+              index={index}
               pokemon={pokemon}
               handleDelete={handleDelete}
               toggleFavourite={toggleFavourite}
