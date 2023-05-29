@@ -7,100 +7,52 @@ function Pokemon({ pokemon, index, liked, toggleFavourite, handleDelete }) {
   const pokemonName =
     pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
 
-  if (index % 2 === 0) {
-    return (
-      <div className="pokemon flex">
-        <div className="pokemon--name flex">
-          <h2>{pokemonName}</h2>
-          <img
-            className="reflect"
-            src={pokemon.sprites.front_shiny}
-            style={{ width: "150px", height: "auto" }}
-          />
-        </div>
-        <div className="pokemon--info">
-          <p className="bold">Index</p>
-          <p>{pokemon.id}</p>
-          <p className="bold">Type{pokemon.types.length > 1 && "s"}</p>
-          <ul>
-            {pokemon.types.map((obj) => {
-              const type =
-                obj.type.name.charAt(0).toUpperCase() + obj.type.name.slice(1);
-              return <li key={obj.slot}>{type}</li>;
-            })}
-          </ul>
-          <p className="bold">Height</p>
-          <p>{pokemon.height * 10}cm</p>
-        </div>
-        <div className="buttons flex">
-          <button
-            onClick={() => {
-              handleDelete(pokemon.id);
-            }}
-          >
-            <FontAwesomeIcon icon={faXmark} />
-          </button>
-          <button
-            onClick={() => {
-              toggleFavourite(pokemon.id);
-            }}
-          >
-            {liked ? (
-              <FontAwesomeIcon icon={faHeart} />
-            ) : (
-              <FontAwesomeIcon icon={faHeartEmpty} />
-            )}
-          </button>
-        </div>
+  return (
+    <div className={index % 2 === 0 ? "pokemon flex" : "pokemon flex reverse"}>
+      <div className="pokemon--name flex">
+        <h2>{pokemonName}</h2>
+        <img
+          className={index % 2 === 0 ? "reflect" : ""}
+          src={pokemon.sprites.front_shiny}
+          style={{ width: "150px", height: "auto" }}
+        />
       </div>
-    );
-  } else {
-    return (
-      <div className="pokemon flex">
-        <div className="buttons flex">
-          <button
-            onClick={() => {
-              handleDelete(pokemon.id);
-            }}
-          >
-            <FontAwesomeIcon icon={faXmark} />
-          </button>
-          <button
-            onClick={() => {
-              toggleFavourite(pokemon.id);
-            }}
-          >
-            {liked ? (
-              <FontAwesomeIcon icon={faHeart} />
-            ) : (
-              <FontAwesomeIcon icon={faHeartEmpty} />
-            )}
-          </button>
-        </div>
-        <div className="pokemon--info">
-          <p className="bold">Index</p>
-          <p>{pokemon.id}</p>
-          <p className="bold">Type{pokemon.types.length > 1 && "s"}</p>
-          <ul>
-            {pokemon.types.map((obj) => {
-              const type =
-                obj.type.name.charAt(0).toUpperCase() + obj.type.name.slice(1);
-              return <li key={obj.slot}>{type}</li>;
-            })}
-          </ul>
-          <p className="bold">Height</p>
-          <p>{pokemon.height * 10}cm</p>
-        </div>
-        <div className="pokemon--name flex">
-          <h2>{pokemonName}</h2>
-          <img
-            src={pokemon.sprites.front_shiny}
-            style={{ width: "150px", height: "auto" }}
-          />
-        </div>
+      <div className="pokemon--info">
+        <p className="bold">Index</p>
+        <p>{pokemon.id}</p>
+        <p className="bold">Type{pokemon.types.length > 1 && "s"}</p>
+        <ul>
+          {pokemon.types.map((obj) => {
+            const type =
+              obj.type.name.charAt(0).toUpperCase() + obj.type.name.slice(1);
+            return <li key={obj.slot}>{type}</li>;
+          })}
+        </ul>
+        <p className="bold">Height</p>
+        <p>{pokemon.height * 10}cm</p>
       </div>
-    );
-  }
+      <div className="buttons flex">
+        <button
+          onClick={() => {
+            handleDelete(pokemon.id);
+          }}
+        >
+          <FontAwesomeIcon icon={faXmark} />
+        </button>
+        <button
+          onClick={() => {
+            toggleFavourite(pokemon.id);
+          }}
+        >
+          {liked ? (
+            <FontAwesomeIcon icon={faHeart} />
+          ) : (
+            <FontAwesomeIcon icon={faHeartEmpty} />
+          )}
+        </button>
+      </div>
+    </div>
+  );
 }
 
 export default Pokemon;
