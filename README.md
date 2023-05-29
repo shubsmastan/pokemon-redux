@@ -6,7 +6,9 @@ A [React](https://react.dev) project created as part of [The Jump](https://www.t
 
 ## Description
 
-Initially learning to use React components, props and state, lifecycle methods, hooks and using event handlers to conditionally render items on the page. Expanded to use Redux to manage state and eventually using Redux Toolkit.
+Initially learning to use React components, props and state, lifecycle methods, hooks and using event handlers to conditionally render items on the page. Expanded to use Redux to manage state and eventually using Redux Toolkit.<br />
+
+This project was created for learning purposes and is in no way associated with Nintendo.
 
 ## Author
 
