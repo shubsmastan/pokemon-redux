@@ -3,15 +3,16 @@ import { faHeart, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartEmpty } from "@fortawesome/free-regular-svg-icons";
 import "../styles/Pokemon.scss";
 
-function Pokemon({ pokemon, liked, toggleFavourite, handleDelete }) {
+function Pokemon({ pokemon, index, liked, toggleFavourite, handleDelete }) {
   const pokemonName =
     pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
 
   return (
-    <div className="pokemon flex">
+    <div className={index % 2 === 0 ? "pokemon flex" : "pokemon flex reverse"}>
       <div className="pokemon--name flex">
         <h2>{pokemonName}</h2>
         <img
+          className={index % 2 === 0 ? "reflect" : ""}
           src={pokemon.sprites.front_shiny}
           style={{ width: "150px", height: "auto" }}
         />
@@ -34,15 +35,13 @@ function Pokemon({ pokemon, liked, toggleFavourite, handleDelete }) {
         <button
           onClick={() => {
             handleDelete(pokemon.id);
-          }}
-        >
+          }}>
           <FontAwesomeIcon icon={faXmark} />
         </button>
         <button
           onClick={() => {
             toggleFavourite(pokemon.id);
-          }}
-        >
+          }}>
           {liked ? (
             <FontAwesomeIcon icon={faHeart} />
           ) : (

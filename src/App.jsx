@@ -6,15 +6,14 @@ import Loading from "./components/Loading";
 import Select from "./components/Select";
 import Pokemon from "./components/Pokemon";
 import Footer from "./components/Footer";
+import { setData, setFavourites } from "./store/pokemonSlice";
 import "./styles/App.scss";
 
 function App() {
   const [error, setError] = useState("");
 
-  const pokemon = useSelector((state) => state.pokemon);
-  const favourites = useSelector((state) => state.favourites);
-  const filter = useSelector((state) => state.filter);
-  const search = useSelector((state) => state.search);
+  const { data, favourites } = useSelector((state) => state.pokemon);
+  const { filter, search } = useSelector((state) => state.filter);
 
   const dispatch = useDispatch();
 
@@ -37,7 +36,7 @@ function App() {
         pokedex = pokedex.concat(data);
       }
       localStorage.setItem("pokemon", JSON.stringify(pokedex));
-      dispatch({ type: "SET_POKEMON", payload: pokedex });
+      dispatch(setData(pokedex));
     } catch (err) {
       setError(`Error fetching Pokemon data. ${err.message}.`);
     }
@@ -54,8 +53,7 @@ function App() {
             padding: "40px 0",
             marginInline: "auto",
             width: "400px",
-          }}
-        >
+          }}>
           {error}
         </div>
       </>
@@ -64,23 +62,24 @@ function App() {
 
   const toggleFavourite = (id) => {
     if (favourites.includes(id)) {
-      dispatch({
-        type: "SET_FAVOURITES",
-        payload: favourites.filter((fave) => fave !== id),
-      });
+      dispatch(setFavourites(favourites.filter((fave) => fave !== id)));
       return;
     }
-    dispatch({ type: "SET_FAVOURITES", payload: [...favourites, id] });
+    dispatch(setFavourites([...favourites, id]));
   };
 
   const handleDelete = (id) => {
-    dispatch({
-      type: "SET_POKEMON",
-      payload: pokemon.filter((mon) => mon.id !== id),
-    });
+    dispatch(setData(data.filter((pokemon) => pokemon.id !== id)));
   };
 
-  let filteredPokemon = [...pokemon];
+  const getNewPokemon = async () => {
+    const response = await axios.get(
+      `https://pokeapi.co/api/v2/pokemon/${Math.floor(Math.random() * 151) + 1}`
+    );
+    dispatch(setData([...data, response.data]));
+  };
+
+  let filteredPokemon = [...data];
 
   if (search) {
     filteredPokemon = filteredPokemon.filter((pokemon) => {
@@ -110,7 +109,7 @@ function App() {
       break;
   }
 
-  if (pokemon.length === 0) {
+  if (data.length === 0) {
     return (
       <>
         <Header />
@@ -119,15 +118,20 @@ function App() {
     );
   }
 
+  if (data.length === 9) {
+    getNewPokemon();
+  }
+
   return (
     <>
       <Header />
       <Select />
       <div className="pokemon-all">
-        {filteredPokemon.map((pokemon) => {
+        {filteredPokemon.map((pokemon, index) => {
           return (
             <Pokemon
               key={pokemon.id}
+              index={index}
               pokemon={pokemon}
               handleDelete={handleDelete}
               toggleFavourite={toggleFavourite}

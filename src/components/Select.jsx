@@ -1,18 +1,16 @@
 import { useDispatch } from "react-redux";
+import { setFilter, setSearch } from "../store/filterSlice";
 import "../styles/Select.scss";
 
 function Select({ selected }) {
   const dispatch = useDispatch();
 
   const changeFilter = (e) => {
-    dispatch({
-      type: "SET_FILTER",
-      payload: e.target.value,
-    });
+    dispatch(setFilter(e.target.value));
   };
 
   const handleChangeInput = (e) => {
-    dispatch({ type: "SET_INPUT", payload: e.target.value });
+    dispatch(setSearch(e.target.value));
   };
 
   return (

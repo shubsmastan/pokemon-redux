@@ -8,7 +8,7 @@
   flex-direction: column;
   justify-content: center;
 
-  img {
+  img.reflect {
     transform: scaleX(-1);
   }
 }
@@ -46,6 +46,9 @@
     padding: 40px 50px;
     justify-content: space-between;
     flex-direction: row;
+  }
+  .reverse {
+    flex-direction: row-reverse;
   }
   .pokemon--info {
     padding-bottom: 0;
