@@ -10,7 +10,8 @@ import { setData, setFavourites } from "./store/pokemonSlice";
 import "./styles/App.scss";
 
 function App() {
-  const [error, setError] = useState("");
+  const [error, setError] = useState();
+  const [deleted, setDeleted] = useState(false);
 
   const { data, favourites } = useSelector((state) => state.pokemon);
   const { filter, search } = useSelector((state) => state.filter);
@@ -42,24 +43,6 @@ function App() {
     }
   };
 
-  if (error) {
-    return (
-      <>
-        <Header />
-        <div
-          style={{
-            fontSize: "2rem",
-            textAlign: "center",
-            padding: "40px 0",
-            marginInline: "auto",
-            width: "400px",
-          }}>
-          {error}
-        </div>
-      </>
-    );
-  }
-
   const toggleFavourite = (id) => {
     if (favourites.includes(id)) {
       dispatch(setFavourites(favourites.filter((fave) => fave !== id)));
@@ -70,13 +53,7 @@ function App() {
 
   const handleDelete = (id) => {
     dispatch(setData(data.filter((pokemon) => pokemon.id !== id)));
-  };
-
-  const getNewPokemon = async () => {
-    const response = await axios.get(
-      `https://pokeapi.co/api/v2/pokemon/${Math.floor(Math.random() * 151) + 1}`
-    );
-    dispatch(setData([...data, response.data]));
+    setDeleted(true);
   };
 
   let filteredPokemon = [...data];
@@ -109,17 +86,31 @@ function App() {
       break;
   }
 
-  if (data.length === 0) {
+  if (error) {
     return (
       <>
         <Header />
-        <Loading />
+        <div
+          style={{
+            fontSize: "2rem",
+            textAlign: "center",
+            padding: "40px 0",
+            marginInline: "auto",
+            width: "400px",
+          }}>
+          {error}
+        </div>
       </>
     );
   }
 
-  if (data.length === 9) {
-    getNewPokemon();
+  if (data.length === 0) {
+    return (
+      <>
+        <Header />
+        <Loading deleted={deleted} />
+      </>
+    );
   }
 
   return (
