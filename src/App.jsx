@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import Header from "./components/Header";
@@ -18,11 +18,7 @@ function App() {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    getData();
-  }, []);
-
-  const getData = async () => {
+  const getData = useCallback(async () => {
     let arr = [];
     while (arr.length < 10) {
       const num = Math.floor(Math.random() * 151) + 1;
@@ -36,12 +32,15 @@ function App() {
         );
         pokedex = pokedex.concat(data);
       }
-      localStorage.setItem("pokemon", JSON.stringify(pokedex));
       dispatch(setData(pokedex));
     } catch (err) {
       setError(`Error fetching Pokemon data. ${err.message}.`);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    getData();
+  }, [getData]);
 
   const toggleFavourite = (id) => {
     if (favourites.includes(id)) {
@@ -58,7 +57,7 @@ function App() {
 
   let filteredPokemon = [...data];
 
-  if (search) {
+  if (search && filter !== "number") {
     filteredPokemon = filteredPokemon.filter((pokemon) => {
       if (pokemon.name.includes(search.toLowerCase())) {
         return true;
@@ -67,6 +66,9 @@ function App() {
   }
 
   switch (filter) {
+    case "all":
+      filteredPokemon = data;
+      break;
     case "favourites":
       filteredPokemon = filteredPokemon.filter((pokemon) =>
         favourites.includes(pokemon.id)
@@ -78,6 +80,11 @@ function App() {
       });
       break;
     case "descending":
+      filteredPokemon = filteredPokemon.sort((pokemon1, pokemon2) => {
+        return -1 * pokemon1.name.localeCompare(pokemon2.name);
+      });
+      break;
+    case "number":
       filteredPokemon = filteredPokemon.sort((pokemon1, pokemon2) => {
         return -1 * pokemon1.name.localeCompare(pokemon2.name);
       });
