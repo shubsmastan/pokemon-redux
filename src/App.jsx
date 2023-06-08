@@ -1,46 +1,24 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
 import Header from "./components/Header";
 import Loading from "./components/Loading";
 import Select from "./components/Select";
 import Pokemon from "./components/Pokemon";
 import Footer from "./components/Footer";
-import { setData, setFavourites } from "./store/pokemonSlice";
+import { getData, setData, setFavourites } from "./store/pokemonSlice";
 import "./styles/App.scss";
 
 function App() {
-  const [error, setError] = useState();
-  const [deleted, setDeleted] = useState(false);
-
-  const { data, favourites } = useSelector((state) => state.pokemon);
+  const { data, favourites, loading, error } = useSelector(
+    (state) => state.pokemon
+  );
   const { filter, search } = useSelector((state) => state.filter);
 
   const dispatch = useDispatch();
 
-  const getData = useCallback(async () => {
-    let arr = [];
-    while (arr.length < 10) {
-      const num = Math.floor(Math.random() * 151) + 1;
-      if (!arr.includes(num)) arr.push(num);
-    }
-    try {
-      let pokedex = [];
-      for (let i = 0; i < arr.length; i++) {
-        const { data } = await axios.get(
-          `https://pokeapi.co/api/v2/pokemon/${arr[i]}`
-        );
-        pokedex = pokedex.concat(data);
-      }
-      dispatch(setData(pokedex));
-    } catch (err) {
-      setError(`Error fetching Pokemon data. ${err.message}.`);
-    }
-  }, []);
-
   useEffect(() => {
-    getData();
-  }, [getData]);
+    dispatch(getData());
+  }, []);
 
   const toggleFavourite = (id) => {
     if (favourites.includes(id)) {
@@ -55,42 +33,13 @@ function App() {
     setDeleted(true);
   };
 
-  let filteredPokemon = [...data];
-
-  if (search && filter !== "number") {
-    filteredPokemon = filteredPokemon.filter((pokemon) => {
-      if (pokemon.name.includes(search.toLowerCase())) {
-        return true;
-      }
-    });
-  }
-
-  switch (filter) {
-    case "all":
-      filteredPokemon = data;
-      break;
-    case "favourites":
-      filteredPokemon = filteredPokemon.filter((pokemon) =>
-        favourites.includes(pokemon.id)
-      );
-      break;
-    case "ascending":
-      filteredPokemon = filteredPokemon.sort((pokemon1, pokemon2) => {
-        return pokemon1.name.localeCompare(pokemon2.name);
-      });
-      break;
-    case "descending":
-      filteredPokemon = filteredPokemon.sort((pokemon1, pokemon2) => {
-        return -1 * pokemon1.name.localeCompare(pokemon2.name);
-      });
-      break;
-    case "number":
-      filteredPokemon = filteredPokemon.sort((pokemon1, pokemon2) => {
-        return -1 * pokemon1.name.localeCompare(pokemon2.name);
-      });
-      break;
-    default:
-      break;
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <Loading />
+      </>
+    );
   }
 
   if (error) {
@@ -115,9 +64,42 @@ function App() {
     return (
       <>
         <Header />
-        <Loading deleted={deleted} />
+        <div
+          style={{ fontSize: "2rem", textAlign: "center", padding: "40px 0" }}>
+          All Pokemon deleted! Refresh the page for more.
+        </div>
       </>
     );
+  }
+
+  let filteredPokemon = [...data];
+
+  if (search) {
+    filteredPokemon = filteredPokemon.filter((pokemon) => {
+      if (pokemon.name.includes(search.toLowerCase())) {
+        return true;
+      }
+    });
+  }
+
+  switch (filter) {
+    case "favourites":
+      filteredPokemon = filteredPokemon.filter((pokemon) =>
+        favourites.includes(pokemon.id)
+      );
+      break;
+    case "ascending":
+      filteredPokemon = filteredPokemon.sort((pokemon1, pokemon2) => {
+        return pokemon1.name.localeCompare(pokemon2.name);
+      });
+      break;
+    case "descending":
+      filteredPokemon = filteredPokemon.sort((pokemon1, pokemon2) => {
+        return -1 * pokemon1.name.localeCompare(pokemon2.name);
+      });
+      break;
+    default:
+      break;
   }
 
   return (
