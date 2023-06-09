@@ -1,16 +1,30 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+
+interface PokemonState {
+  data: Array<any> | undefined;
+  favourites: number[];
+  loading: boolean;
+  error: unknown;
+}
+
+const initialState: PokemonState = {
+  data: [],
+  favourites: [],
+  loading: true,
+  error: null,
+};
 
 export const getData = createAsyncThunk(
   "pokemon/getPokemon",
   async (_, thunkAPI) => {
-    let arr = [];
+    const arr: number[] = [];
     while (arr.length < 10) {
       const num = Math.floor(Math.random() * 151) + 1;
       if (!arr.includes(num)) arr.push(num);
     }
     try {
-      let pokedex = [];
+      let pokedex: object[] = [];
       for (let i = 0; i < arr.length; i++) {
         const { data } = await axios.get(
           `https://pokeapi.co/api/v2/pokemon/${arr[i]}`
@@ -18,22 +32,20 @@ export const getData = createAsyncThunk(
         pokedex = pokedex.concat(data);
       }
       return pokedex;
-    } catch (err) {
-      return thunkAPI.rejectWithValue(
-        `Error getting Pokemon data. ${err.message}.`
-      );
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        return thunkAPI.rejectWithValue(
+          `Error getting Pokemon data. ${err.message}.`
+        );
+      }
+      console.log(err);
     }
   }
 );
 
 const pokemonSlice = createSlice({
   name: "pokemon",
-  initialState: {
-    data: [],
-    favourites: [],
-    loading: true,
-    error: null,
-  },
+  initialState,
   reducers: {
     setData: (state, action) => {
       state.data = action.payload;

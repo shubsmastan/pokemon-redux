@@ -3,7 +3,27 @@ import { faHeart, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartEmpty } from "@fortawesome/free-regular-svg-icons";
 import "../styles/Pokemon.scss";
 
-function Pokemon({ pokemon, index, liked, toggleFavourite, handleDelete }) {
+interface PokemonComponentProps {
+  pokemon: {
+    name: string;
+    id: number;
+    height: number;
+    types: { slot: number; type: { name: string } }[];
+    sprites: { front_shiny: string };
+  };
+  index: number;
+  liked: boolean;
+  toggleFavourite: (id: number) => void;
+  handleDelete: (id: number) => void;
+}
+
+function Pokemon({
+  pokemon,
+  index,
+  liked,
+  toggleFavourite,
+  handleDelete,
+}: PokemonComponentProps) {
   const pokemonName =
     pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
 

@@ -1,23 +1,23 @@
-import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setFilter, setSearch } from "../store/filterSlice";
+import { setFilter, setSearch, setError } from "../store/filterSlice";
+import { RootState } from "../store";
 import { validate } from "../validation";
 import "../styles/Select.scss";
 
 function Select() {
-  const [error, setError] = useState(null);
-
   const dispatch = useDispatch();
 
-  const { filter, search } = useSelector((state) => state.filter);
+  const { filter, search, error } = useSelector(
+    (state: RootState) => state.filter
+  );
 
-  const changeFilter = (e) => {
+  const changeFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch(setFilter(e.target.value));
   };
 
-  const onSearchInput = async (e) => {
+  const onSearchInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setSearch(e.target.value));
-    setError(await validate(e.target.value));
+    dispatch(setError(await validate(e.target.value)));
   };
 
   return (

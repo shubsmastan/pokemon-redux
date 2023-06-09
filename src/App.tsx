@@ -5,32 +5,33 @@ import Loading from "./components/Loading";
 import Select from "./components/Select";
 import Pokemon from "./components/Pokemon";
 import Footer from "./components/Footer";
+import { AppDispatch, RootState } from "./store";
 import { getData, setData, setFavourites } from "./store/pokemonSlice";
 import "./styles/App.scss";
 
 function App() {
   const { data, favourites, loading, error } = useSelector(
-    (state) => state.pokemon
+    (state: RootState) => state.pokemon
   );
-  const { filter, search } = useSelector((state) => state.filter);
+  const { filter, search } = useSelector((state: RootState) => state.filter);
+  const searchError = useSelector((state: RootState) => state.filter.error);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     dispatch(getData());
-  }, []);
+  }, [dispatch]);
 
-  const toggleFavourite = (id) => {
+  const toggleFavourite = (id: number) => {
     if (favourites.includes(id)) {
-      dispatch(setFavourites(favourites.filter((fave) => fave !== id)));
+      dispatch(setFavourites(favourites.filter((fave: number) => fave !== id)));
       return;
     }
     dispatch(setFavourites([...favourites, id]));
   };
 
-  const handleDelete = (id) => {
-    dispatch(setData(data.filter((pokemon) => pokemon.id !== id)));
-    setDeleted(true);
+  const handleDelete = (id: number) => {
+    dispatch(setData(data?.filter((pokemon) => pokemon.id !== id)));
   };
 
   if (loading) {
@@ -54,13 +55,13 @@ function App() {
             marginInline: "auto",
             width: "400px",
           }}>
-          {error}
+          error
         </div>
       </>
     );
   }
 
-  if (data.length === 0) {
+  if (data?.length === 0) {
     return (
       <>
         <Header />
@@ -72,7 +73,7 @@ function App() {
     );
   }
 
-  let filteredPokemon = [...data];
+  let filteredPokemon = [...(data as any[])];
 
   if (search) {
     filteredPokemon = filteredPokemon.filter((pokemon) => {
@@ -81,6 +82,8 @@ function App() {
       }
     });
   }
+
+  if (searchError) filteredPokemon = [...(data as any[])];
 
   switch (filter) {
     case "favourites":
