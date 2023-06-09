@@ -9,7 +9,13 @@ interface PokemonComponentProps {
     id: number;
     height: number;
     types: { slot: number; type: { name: string } }[];
-    sprites: { front_shiny: string };
+    sprites: {
+      versions: {
+        "generation-vi": {
+          "omegaruby-alphasapphire": { front_default: string };
+        };
+      };
+    };
   };
   index: number;
   liked: boolean;
@@ -33,7 +39,10 @@ function Pokemon({
         <h2>{pokemonName}</h2>
         <img
           className={index % 2 === 0 ? "reflect" : ""}
-          src={pokemon.sprites.front_shiny}
+          src={
+            pokemon.sprites.versions["generation-vi"]["omegaruby-alphasapphire"]
+              .front_default
+          }
           style={{ width: "150px", height: "auto" }}
         />
       </div>
