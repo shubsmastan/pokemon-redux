@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export interface FilterState {
+export type FilterState = {
   filter: string;
   search: string;
   error: string | null;
-}
+};
 
 const initialState: FilterState = { filter: "all", search: "", error: null };
 

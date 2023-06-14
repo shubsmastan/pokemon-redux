@@ -7,6 +7,7 @@ import Pokemon from "./components/Pokemon";
 import Footer from "./components/Footer";
 import { AppDispatch, RootState } from "./store";
 import { getData, setData, setFavourites } from "./store/pokemonSlice";
+import { Pokemon as PokemonType } from "./store/pokemonSlice";
 import "./styles/App.scss";
 
 function App() {
@@ -73,7 +74,7 @@ function App() {
     );
   }
 
-  let filteredPokemon = [...(data as any[])];
+  let filteredPokemon = [...(data as PokemonType[])];
 
   if (search) {
     filteredPokemon = filteredPokemon.filter((pokemon) => {
@@ -83,7 +84,7 @@ function App() {
     });
   }
 
-  if (searchError) filteredPokemon = [...(data as any[])];
+  if (searchError) filteredPokemon = [...(data as PokemonType[])];
 
   switch (filter) {
     case "favourites":

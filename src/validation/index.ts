@@ -6,10 +6,7 @@ export const validate = async (input: string) => {
       "string.alphanum": "Search must only contain alphanumeric characters.",
     }),
   });
-  try {
-    await schema.validateAsync({ search: input });
-    return null;
-  } catch (err: any) {
-    return err.details[0].message;
-  }
+  const result = schema.validate({ search: input });
+  if (result.error) return result.error.details[0].message;
+  return;
 };

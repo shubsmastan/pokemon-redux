@@ -2,26 +2,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartEmpty } from "@fortawesome/free-regular-svg-icons";
 import "../styles/Pokemon.scss";
+import { Pokemon as PokemonType } from "../store/pokemonSlice";
 
-interface PokemonComponentProps {
-  pokemon: {
-    name: string;
-    id: number;
-    height: number;
-    types: { slot: number; type: { name: string } }[];
-    sprites: {
-      versions: {
-        "generation-vi": {
-          "omegaruby-alphasapphire": { front_default: string };
-        };
-      };
-    };
-  };
+type PokemonComponentProps = {
+  pokemon: PokemonType;
   index: number;
   liked: boolean;
   toggleFavourite: (id: number) => void;
   handleDelete: (id: number) => void;
-}
+};
 
 function Pokemon({
   pokemon,

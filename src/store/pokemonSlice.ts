@@ -1,12 +1,26 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 
-interface PokemonState {
-  data: Array<any> | undefined;
+export type Pokemon = {
+  name: string;
+  id: number;
+  height: number;
+  types: { slot: number; type: { name: string } }[];
+  sprites: {
+    versions: {
+      "generation-vi": {
+        "omegaruby-alphasapphire": { front_default: string };
+      };
+    };
+  };
+};
+
+type PokemonState = {
+  data: Array<Pokemon> | undefined;
   favourites: number[];
   loading: boolean;
   error: unknown;
-}
+};
 
 const initialState: PokemonState = {
   data: [],
@@ -61,7 +75,7 @@ const pokemonSlice = createSlice({
       })
       .addCase(getData.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.data = payload;
+        state.data = payload as Pokemon[];
       })
       .addCase(getData.rejected, (state, { payload }) => {
         state.loading = false;
